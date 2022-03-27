@@ -58,7 +58,7 @@ namespace Sudoku
                 }
             }
         }
-        public bool checkRow(int multiple)
+        private bool checkRow(int multiple)
         {
             List<string> values = new List<string>();
             for (int i = 0; i < 6; ++i)
@@ -67,11 +67,10 @@ namespace Sudoku
                 {
                     values.Add(table[i + multiple]);
                 }
-                //Console.WriteLine($"element: {table[i + multiple]} index: {(i + multiple)}");
             }
             return values.Count() == 6 ? true : false;
         }
-        public bool checkColumn(int multiple)
+        private bool checkColumn(int multiple)
         {
             List<string> values = new List<string>();
             for (int i = 0; i < 6; ++i)
@@ -80,10 +79,24 @@ namespace Sudoku
                 {
                     values.Add(table[i * 6 + multiple]);
                 }
-                //Console.WriteLine($"element: {table[i * 6 + multiple]} index: {(i + multiple)}");
             }
             return values.Count() == 6 ? true : false;
         }
+        public bool checkSquare(int multiple)
+        {
+            List<string> values = new List<string>();
+            for (int i = 0; i < 6; ++i)
+            {
+                if (!values.Contains(table[i]) && i <= 2)
+                {
+                    values.Add(table[i]);
+                } else if (!values.Contains(table[i]) && i > 2)
+                {
 
+                }
+            }
+
+            return values.Count() == 6 ? true : false;
+        }
     }
 }
