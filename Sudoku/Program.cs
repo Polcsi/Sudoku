@@ -11,7 +11,6 @@ namespace Sudoku
         static void Main(string[] args)
         {
             Sudoku sudoku = new Sudoku();
-            sudoku.draw();
             //Console.WriteLine($"Check First Column: {sudoku.checkColumn(0)}");
             //Console.WriteLine($"Check Second Column: {sudoku.checkColumn(1)}");
             //Console.WriteLine($"Check Third Column: {sudoku.checkColumn(2)}");
