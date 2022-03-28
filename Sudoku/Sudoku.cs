@@ -55,14 +55,14 @@ namespace Sudoku
                         }
                     }
                 }
-                Actions.DelayAction(80, new Action(() => { draw(i *  Settings.Count); }));
+                Actions.DelayAction(50, new Action(() => { draw(i *  Settings.Count); }));
             }
         }
         private void draw(int row)
         {
             for (int i = 0; i <  Settings.Count; ++i)
             {
-                Actions.DelayAction(200, new Action(() => { Console.Write("|" + Settings.Table[i + row]); }));
+                Actions.DelayAction(0, new Action(() => { Console.Write("|" + Settings.Table[i + row]); }));
                 if ((i + 1) %  Settings.Count == 0)
                 {
                     Console.WriteLine("|");
@@ -95,17 +95,44 @@ namespace Sudoku
         }
         public bool checkSquare(int multiple)
         {
-            List<string> values = new List<string>();
-            for (int i = 0; i <  Settings.Count; ++i)
+            List<string> values = new List<string>(6);
+            for (int i = 0; i < Settings.Count; ++i)
             {
                 if (!values.Contains(Settings.Table[i]) && i <= 2)
                 {
                     values.Add(Settings.Table[i]);
-                } else if (!values.Contains(Settings.Table[i]) && i > 2)
+                }
+                else if (!values.Contains(Settings.Table[i]) && i > 2)
                 {
-
+                    Console.WriteLine(Settings.Table[i]);
                 }
             }
+
+            //if (!values.Contains(Settings.Table[0]))
+            //{
+            //    values.Add(Settings.Table[0]);
+            //}
+            //if (!values.Contains(Settings.Table[1]))
+            //{
+            //    values.Add(Settings.Table[1]);
+            //}
+            //if (!values.Contains(Settings.Table[2]))
+            //{
+            //    values.Add(Settings.Table[2]);
+            //}
+            //if (!values.Contains(Settings.Table[6]))
+            //{
+            //    values.Add(Settings.Table[6]);
+            //}
+            //if (!values.Contains(Settings.Table[7]))
+            //{
+            //    values.Add(Settings.Table[7]);
+            //}
+            //if (!values.Contains(Settings.Table[8]))
+            //{
+            //    values.Add(Settings.Table[8]);
+            //}
+
             return values.Count() ==  Settings.Count ? true : false;
         }
     }
