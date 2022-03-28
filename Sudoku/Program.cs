@@ -6,7 +6,7 @@ namespace Sudoku
     {
         static void Main(string[] args)
         {
-            new Sudoku();
+            new Sudoku(81, 9);
             _ = Console.ReadKey();
         }
     }

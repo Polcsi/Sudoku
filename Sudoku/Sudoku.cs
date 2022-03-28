@@ -6,58 +6,64 @@ namespace Sudoku
 {
     class Sudoku
     {
-        private Random rnd = new Random();
-        private string[] table { get; set; }
-        private string[] characters { get; set; }
-        public Sudoku()
+        private static Random rnd = new Random();
+        private Settings Settings { get; set; }
+        public Sudoku(int table, int count)
         {
-            table = new string[36];
-            characters = new string[6] { "1", "2", "3", "4", "5", "6" };
+            Settings settings = new Settings();
+            settings.Table = new string[table];
+            settings.Count = count;
+            settings.Characters = new string[count];
+            for (int i = 0; i < count; ++i)
+            {
+                settings.Characters[i] = $"{i + 1}"; 
+            }
+            Settings = settings;
             fillTable();
         }
         private void fillTable()
         {
-            for (int i = 0; i < 6; i++)
+            for (int i = 0; i < Settings.Count; ++i)
             {
-                while (!checkRow(i * 6))
+                while (!checkRow(i * Settings.Count))
                 {
                     if (i < 1)
                     {
-                        for (int j = 0; j < 6; ++j)
+                        for (int j = 0; j < Settings.Count; ++j)
                         {
-                            table[j + (i * 6)] = characters[rnd.Next(characters.Length)];
+                            Settings.Table[j + (i * Settings.Count)] = Settings.Characters[rnd.Next(Settings.Characters.Length)];
                         }
                     }
                     else
                     {
                         string[] aboveChars;
-                        for (int j = 0; j < 6; ++j)
+                        for (int j = 0; j < Settings.Count; ++j)
                         {
-                            aboveChars = new string[(i * 6) / 6];
+                            aboveChars = new string[(i * Settings.Count) /  Settings.Count];
                             for (int k = 1; k < aboveChars.Length + 1; ++k)
                             {
-                                aboveChars[k - 1] = table[(j + (i * 6) - (k * 6))];
-                                //Console.Write($"ABOVE ELEMENT: {table[(j + (i * 6) - (k * 6))]} INDEX: {(j + (i * 6) - (k * 6))} |k: {k}.| ACTUAL INDEX: {j + (i * 6)}  ");
+                                aboveChars[k - 1] = Settings.Table[(j + (i *  Settings.Count) - (k *  Settings.Count))];
+                                //Console.Write($"ABOVE ELEMENT: {Settings.Table[(j + (i *  Settings.Count) - (k *  Settings.Count))]} INDEX: {(j + (i *  Settings.Count) - (k *  Settings.Count))} |k: {k}.| ACTUAL INDEX: {j + (i *  Settings.Count)}  ");
                             }
                             //Console.WriteLine();
-                            string randomChar = characters[rnd.Next(characters.Length)];
+                            string randomChar = Settings.Characters[rnd.Next(Settings.Characters.Length)];
                             while (aboveChars.Contains(randomChar))
                             {
-                                randomChar = characters[rnd.Next(characters.Length)];
+                                randomChar = Settings.Characters[rnd.Next(Settings.Characters.Length)];
                             }
-                            table[j + (i * 6)] = randomChar;
+                            Settings.Table[j + (i *  Settings.Count)] = randomChar;
                         }
                     }
                 }
-                Actions.DelayAction(100, new Action(() => { draw(i * 6); }));
+                Actions.DelayAction(80, new Action(() => { draw(i *  Settings.Count); }));
             }
         }
         private void draw(int row)
         {
-            for (int i = 0; i < 6; ++i)
+            for (int i = 0; i <  Settings.Count; ++i)
             {
-                Actions.DelayAction(200, new Action(() => { Console.Write("|" + table[i + row]); }));
-                if ((i + 1) % 6 == 0)
+                Actions.DelayAction(200, new Action(() => { Console.Write("|" + Settings.Table[i + row]); }));
+                if ((i + 1) %  Settings.Count == 0)
                 {
                     Console.WriteLine("|");
                 }
@@ -66,41 +72,41 @@ namespace Sudoku
         private bool checkRow(int multiple)
         {
             List<string> values = new List<string>();
-            for (int i = 0; i < 6; ++i)
+            for (int i = 0; i <  Settings.Count; ++i)
             {
-                if (!values.Contains(table[i + multiple]))
+                if (!values.Contains(Settings.Table[i + multiple]))
                 {
-                    values.Add(table[i + multiple]);
+                    values.Add(Settings.Table[i + multiple]);
                 }
             }
-            return values.Count() == 6 ? true : false;
+            return values.Count() ==  Settings.Count ? true : false;
         }
         private bool checkColumn(int multiple)
         {
             List<string> values = new List<string>();
-            for (int i = 0; i < 6; ++i)
+            for (int i = 0; i <  Settings.Count; ++i)
             {
-                if (!values.Contains(table[i * 6 + multiple]))
+                if (!values.Contains(Settings.Table[i *  Settings.Count + multiple]))
                 {
-                    values.Add(table[i * 6 + multiple]);
+                    values.Add(Settings.Table[i *  Settings.Count + multiple]);
                 }
             }
-            return values.Count() == 6 ? true : false;
+            return values.Count() ==  Settings.Count ? true : false;
         }
         public bool checkSquare(int multiple)
         {
             List<string> values = new List<string>();
-            for (int i = 0; i < 6; ++i)
+            for (int i = 0; i <  Settings.Count; ++i)
             {
-                if (!values.Contains(table[i]) && i <= 2)
+                if (!values.Contains(Settings.Table[i]) && i <= 2)
                 {
-                    values.Add(table[i]);
-                } else if (!values.Contains(table[i]) && i > 2)
+                    values.Add(Settings.Table[i]);
+                } else if (!values.Contains(Settings.Table[i]) && i > 2)
                 {
 
                 }
             }
-            return values.Count() == 6 ? true : false;
+            return values.Count() ==  Settings.Count ? true : false;
         }
     }
 }
