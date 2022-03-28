@@ -6,7 +6,7 @@ using System.Threading;
 
 namespace Sudoku
 {
-    internal class Actions
+    class Actions
     {
         public static void DelayAction(int millisecond, Action action)
         {

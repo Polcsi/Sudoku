@@ -1,19 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 
 namespace Sudoku
 {
-    internal class Sudoku
+    class Sudoku
     {
+        private Random rnd = new Random();
+        private string[] table { get; set; }
+        private string[] characters { get; set; }
         public Sudoku()
         {
+            table = new string[36];
+            characters = new string[6] { "1", "2", "3", "4", "5", "6" };
             fillTable();
         }
-        private Random rnd = new Random();
-        private string[] table = new string[36];
-        private readonly string[] characters = new string[6] { "1", "2", "3", "4", "5", "6"};
         private void fillTable()
         {
             for (int i = 0; i < 6; i++)
@@ -25,7 +26,6 @@ namespace Sudoku
                         for (int j = 0; j < 6; ++j)
                         {
                             table[j + (i * 6)] = characters[rnd.Next(characters.Length)];
-                            Actions.DelayAction(50, new Action(() => { draw(); }));
                         }
                     }
                     else
@@ -46,22 +46,20 @@ namespace Sudoku
                                 randomChar = characters[rnd.Next(characters.Length)];
                             }
                             table[j + (i * 6)] = randomChar;
-                            Actions.DelayAction(100, new Action(() => { draw(); }));
                         }
                     }
-                    
                 }
+                Actions.DelayAction(100, new Action(() => { draw(i * 6); }));
             }
         }
-        private void draw()
+        private void draw(int row)
         {
-            Console.Clear();
-            for (int i = 0; i < table.Length; ++i)
+            for (int i = 0; i < 6; ++i)
             {
-                Console.Write(table[i]);
+                Actions.DelayAction(200, new Action(() => { Console.Write("|" + table[i + row]); }));
                 if ((i + 1) % 6 == 0)
                 {
-                    Console.WriteLine();
+                    Console.WriteLine("|");
                 }
             }
         }
@@ -102,7 +100,6 @@ namespace Sudoku
 
                 }
             }
-
             return values.Count() == 6 ? true : false;
         }
     }
