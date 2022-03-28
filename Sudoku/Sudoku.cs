@@ -102,10 +102,12 @@ namespace Sudoku
                 {
                     values.Add(Settings.Table[i]);
                 }
-                else if (!values.Contains(Settings.Table[i]) && i > 2)
+                else if (!values.Contains(Settings.Table[i + (3 * multiple)]) && i > 2)
                 {
-                    Console.WriteLine(Settings.Table[i]);
+                    values.Add(Settings.Table[i + (3 * multiple)]);
+                    //Console.WriteLine(Settings.Table[i + (3 * multiple)]);
                 }
+                Console.WriteLine(Settings.Table[i + (3 * multiple)]);
             }
 
             //if (!values.Contains(Settings.Table[0]))
