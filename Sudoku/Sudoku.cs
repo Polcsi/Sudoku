@@ -14,10 +14,13 @@ namespace Sudoku
             settings.Table = new string[table];
             settings.Count = count;
             settings.Characters = new string[count];
+            int result = 0;
             for (int i = 0; i < count; ++i)
             {
-                settings.Characters[i] = $"{i + 1}"; 
+                settings.Characters[i] = $"{i + 1}";
+                result += i+1;
             }
+            settings.Result = result;
             Settings = settings;
             fillTable();
         }
@@ -36,18 +39,20 @@ namespace Sudoku
                     }
                     else
                     {
-                        string[] aboveChars;
+                        string[] aboveColumnChars;
                         for (int j = 0; j < Settings.Count; ++j)
                         {
-                            aboveChars = new string[(i * Settings.Count) /  Settings.Count];
-                            for (int k = 1; k < aboveChars.Length + 1; ++k)
+                            aboveColumnChars = new string[(i * Settings.Count) /  Settings.Count];
+                            for (int k = 1; k < aboveColumnChars.Length + 1; ++k)
                             {
-                                aboveChars[k - 1] = Settings.Table[(j + (i *  Settings.Count) - (k *  Settings.Count))];
+                                aboveColumnChars[k - 1] = Settings.Table[(j + (i *  Settings.Count) - (k *  Settings.Count))];
                                 //Console.Write($"ABOVE ELEMENT: {Settings.Table[(j + (i *  Settings.Count) - (k *  Settings.Count))]} INDEX: {(j + (i *  Settings.Count) - (k *  Settings.Count))} |k: {k}.| ACTUAL INDEX: {j + (i *  Settings.Count)}  ");
                             }
                             //Console.WriteLine();
+                            List<string> missing = missingValues(i);
                             string randomChar = Settings.Characters[rnd.Next(Settings.Characters.Length)];
-                            while (aboveChars.Contains(randomChar))
+                            //string randomChar = missing.Count != 0 ? missing[0] : Settings.Characters[rnd.Next(Settings.Characters.Length)];
+                            while (aboveColumnChars.Contains(randomChar))
                             {
                                 randomChar = Settings.Characters[rnd.Next(Settings.Characters.Length)];
                             }
@@ -95,47 +100,65 @@ namespace Sudoku
         }
         public bool checkSquare(int multiple)
         {
-            List<string> values = new List<string>(6);
-            for (int i = 0; i < Settings.Count; ++i)
+            int startingIndex = multiple % 2 == 0 ? multiple * (Settings.Count * 2) / 2 : ((multiple - 1) * (Settings.Count * 2) / 2) + Settings.Count / 2;
+
+            List<string> values = new List<string>();
+
+            for (int i = 0; i < Settings.Count / 2; ++i)
             {
-                if (!values.Contains(Settings.Table[i]) && i <= 2)
+                if (!values.Contains(Settings.Table[startingIndex]))
                 {
-                    values.Add(Settings.Table[i]);
+                    values.Add(Settings.Table[startingIndex]);
                 }
-                else if (!values.Contains(Settings.Table[i + (3 * multiple)]) && i > 2)
+                //Console.Write(Settings.Table[startingIndex] + " ");
+                startingIndex++;
+            }
+            startingIndex += Settings.Count / 2;
+            for (int i = 0; i < Settings.Count / 2; ++i)
+            {
+                if (!values.Contains(Settings.Table[startingIndex]))
                 {
-                    values.Add(Settings.Table[i + (3 * multiple)]);
-                    //Console.WriteLine(Settings.Table[i + (3 * multiple)]);
+                    values.Add(Settings.Table[startingIndex]);
                 }
-                Console.WriteLine(Settings.Table[i + (3 * multiple)]);
+                //Console.Write(Settings.Table[startingIndex] + " ");
+                startingIndex++;
             }
 
-            //if (!values.Contains(Settings.Table[0]))
-            //{
-            //    values.Add(Settings.Table[0]);
-            //}
-            //if (!values.Contains(Settings.Table[1]))
-            //{
-            //    values.Add(Settings.Table[1]);
-            //}
-            //if (!values.Contains(Settings.Table[2]))
-            //{
-            //    values.Add(Settings.Table[2]);
-            //}
-            //if (!values.Contains(Settings.Table[6]))
-            //{
-            //    values.Add(Settings.Table[6]);
-            //}
-            //if (!values.Contains(Settings.Table[7]))
-            //{
-            //    values.Add(Settings.Table[7]);
-            //}
-            //if (!values.Contains(Settings.Table[8]))
-            //{
-            //    values.Add(Settings.Table[8]);
-            //}
+            return values.Count() ==  Settings.Count;
+        }
+        public List<string> missingValues(int multiple)
+        {
+            int startingIndex = multiple % 2 == 0 ? multiple * (Settings.Count * 2) / 2 : ((multiple - 1) * (Settings.Count * 2) / 2) + Settings.Count / 2;
 
-            return values.Count() ==  Settings.Count ? true : false;
+            List<string> values = new List<string>();
+            List<string> missingValues = new List<string>();
+
+            for (int i = 0; i < Settings.Count / 2; ++i)
+            {
+                if (!values.Contains(Settings.Table[startingIndex]))
+                {
+                    values.Add(Settings.Table[startingIndex]);
+                }
+                startingIndex++;
+            }
+            startingIndex += Settings.Count / 2;
+            for (int i = 0; i < Settings.Count / 2; ++i)
+            {
+                if (!values.Contains(Settings.Table[startingIndex]))
+                {
+                    values.Add(Settings.Table[startingIndex]);
+                }
+                startingIndex++;
+            }
+            foreach (var chars in Settings.Characters)
+            {
+                if(!values.Contains(chars))
+                {
+                    missingValues.Add(chars);
+                }
+            }
+
+            return missingValues;
         }
     }
 }
