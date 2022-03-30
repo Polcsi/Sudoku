@@ -54,6 +54,7 @@ namespace Sudoku
                             //string randomChar = missing.Count != 0 ? missing[0] : Settings.Characters[rnd.Next(Settings.Characters.Length)];
                             while (aboveColumnChars.Contains(randomChar))
                             {
+                                //Console.Write(randomChar);
                                 randomChar = Settings.Characters[rnd.Next(Settings.Characters.Length)];
                             }
                             Settings.Table[j + (i *  Settings.Count)] = randomChar;
@@ -68,22 +69,50 @@ namespace Sudoku
                 {
                     for (int j = 0; j < doubled.Count; ++j)
                     {
-                        //Console.WriteLine($"Range: {i*6}-{i*6 + 5}");
-                        //foreach (var item in doubled)
-                        //{
-                        //    Console.Write(item + " ");
-                        //}
-                        for (int k = i * 6; k < i * 6 + 5; ++k)
+                        //Console.Write($"Range: {i * 6}-{i * 6 + 2} ");
+                        foreach (var item in missing)
                         {
-                            //Console.WriteLine(Settings.Table[k] + " " + doubled[k]);
-                            if (Settings.Table[k] == doubled[j])
+                            Console.Write(item + " ");
+                        }
+                        foreach (var item in doubled)
+                        {
+                            Console.Write(item + " ");
+                        }
+                        Console.WriteLine();
+                        for (int k = i * 6; k < i * 6 + 2; ++k)
+                        {
+                            //Console.WriteLine(Settings.Table[k] + " " + missing[j]);
+                            //Console.WriteLine(missing[j].Contains(Settings.Table[k]));
+                            if (missing[j].Contains(Settings.Table[k]))
+                            {
+                                Console.WriteLine($"SWAP: {Settings.Table[k]} to {doubled[j]} at {k} i={i}");
+                                Settings.Table[k] = doubled[j];
+                            }
+                        }
+                    }
+                    for (int j = 0; j < doubled.Count; ++j)
+                    {
+                        //Console.Write($"Range: {i * 6 + 3}-{i * 6 + 5} ");
+                        foreach (var item in missing)
+                        {
+                            Console.Write(item + " ");
+                        }
+                        foreach (var item in doubled)
+                        {
+                            Console.Write(item + " ");
+                        }
+                        Console.WriteLine();
+                        for (int k = i * 6 + 3; k < i * 6 + 5; ++k)
+                        {
+                            //Console.WriteLine(Settings.Table[k] + " " + doubled[j]);
+                            //Console.WriteLine(doubled[j].Contains(Settings.Table[k]));
+                            if (doubled[j].Contains(Settings.Table[k]))
                             {
                                 Console.WriteLine($"SWAP: {Settings.Table[k]} to {missing[j]} at {k} i={i}");
                                 Settings.Table[k] = missing[j];
                             }
                         }
                     }
-
                 }
 
                 Actions.DelayAction(50, new Action(() => { draw(i *  Settings.Count); }));
