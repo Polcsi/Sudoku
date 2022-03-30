@@ -23,6 +23,7 @@ namespace Sudoku
             settings.Result = result;
             Settings = settings;
             fillTable();
+            Actions.WriteSudoku(Settings);
         }
         private void fillTable()
         {
@@ -69,7 +70,7 @@ namespace Sudoku
                 {
                     for (int j = 0; j < doubled.Count; ++j)
                     {
-                        //Console.Write($"Range: {i * 6}-{i * 6 + 2} ");
+                        Console.Write($"Range: {i * 6}-{i * 6 + 2} ");
                         foreach (var item in missing)
                         {
                             Console.Write(item + " ");
@@ -79,10 +80,10 @@ namespace Sudoku
                             Console.Write(item + " ");
                         }
                         Console.WriteLine();
-                        for (int k = i * 6; k < i * 6 + 2; ++k)
+                        for (int k = i * 6; k < i * 6 + 3; ++k)
                         {
                             //Console.WriteLine(Settings.Table[k] + " " + missing[j]);
-                            //Console.WriteLine(missing[j].Contains(Settings.Table[k]));
+                            Console.WriteLine($"{missing[j]} contains {Settings.Table[k]} | {missing[j].Contains(Settings.Table[k])}");
                             if (missing[j].Contains(Settings.Table[k]))
                             {
                                 Console.WriteLine($"SWAP: {Settings.Table[k]} to {doubled[j]} at {k} i={i}");
@@ -92,20 +93,20 @@ namespace Sudoku
                     }
                     for (int j = 0; j < doubled.Count; ++j)
                     {
-                        //Console.Write($"Range: {i * 6 + 3}-{i * 6 + 5} ");
-                        foreach (var item in missing)
-                        {
-                            Console.Write(item + " ");
-                        }
+                        Console.Write($"Range: {i * 6 + 3}-{i * 6 + 5} ");
                         foreach (var item in doubled)
                         {
                             Console.Write(item + " ");
                         }
+                        foreach (var item in missing)
+                        {
+                            Console.Write(item + " ");
+                        }
                         Console.WriteLine();
-                        for (int k = i * 6 + 3; k < i * 6 + 5; ++k)
+                        for (int k = i * 6 + 3; k < i * 6 + 6; ++k)
                         {
                             //Console.WriteLine(Settings.Table[k] + " " + doubled[j]);
-                            //Console.WriteLine(doubled[j].Contains(Settings.Table[k]));
+                            Console.WriteLine($"{doubled[j]} contains {Settings.Table[k]} | {doubled[j].Contains(Settings.Table[k])}");
                             if (doubled[j].Contains(Settings.Table[k]))
                             {
                                 Console.WriteLine($"SWAP: {Settings.Table[k]} to {missing[j]} at {k} i={i}");
@@ -114,7 +115,6 @@ namespace Sudoku
                         }
                     }
                 }
-
                 Actions.DelayAction(50, new Action(() => { draw(i *  Settings.Count); }));
             }
         }
