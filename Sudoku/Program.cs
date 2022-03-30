@@ -8,22 +8,13 @@ namespace Sudoku
         static void Main(string[] args)
         {
             Sudoku sudoku = new Sudoku(36, 6);
-            Console.WriteLine(sudoku.checkSquare(0));
-            Console.WriteLine(sudoku.checkSquare(1));
-            Console.WriteLine(sudoku.checkSquare(2));
-            Console.WriteLine(sudoku.checkSquare(3));
-            Console.WriteLine(sudoku.checkSquare(4));
-            Console.WriteLine(sudoku.checkSquare(5));
-            List<string> list = sudoku.missingValues(0);
-            foreach (var item in list)
+            while(!sudoku.isValid())
             {
-                Console.WriteLine(item);
+                Console.Clear();
+                sudoku.fillTable();
             }
-            List<string> list2 = sudoku.doubleValues(0);
-            foreach (var item in list2)
-            {
-                Console.WriteLine(item);
-            }
+            Console.WriteLine(sudoku.isValid());
+            
             _ = Console.ReadKey();
         }
     }
