@@ -19,6 +19,11 @@ namespace Sudoku
             {
                 Console.WriteLine(item);
             }
+            List<string> list2 = sudoku.doubleValues(0);
+            foreach (var item in list2)
+            {
+                Console.WriteLine(item);
+            }
             _ = Console.ReadKey();
         }
     }

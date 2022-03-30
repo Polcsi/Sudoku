@@ -49,7 +49,7 @@ namespace Sudoku
                                 //Console.Write($"ABOVE ELEMENT: {Settings.Table[(j + (i *  Settings.Count) - (k *  Settings.Count))]} INDEX: {(j + (i *  Settings.Count) - (k *  Settings.Count))} |k: {k}.| ACTUAL INDEX: {j + (i *  Settings.Count)}  ");
                             }
                             //Console.WriteLine();
-                            List<string> missing = missingValues(i);
+                            
                             string randomChar = Settings.Characters[rnd.Next(Settings.Characters.Length)];
                             //string randomChar = missing.Count != 0 ? missing[0] : Settings.Characters[rnd.Next(Settings.Characters.Length)];
                             while (aboveColumnChars.Contains(randomChar))
@@ -60,6 +60,32 @@ namespace Sudoku
                         }
                     }
                 }
+
+                List<string> doubled = doubleValues(i);
+                List<string> missing = missingValues(i);
+
+                if (doubled.Count > 0)
+                {
+                    for (int j = 0; j < doubled.Count; ++j)
+                    {
+                        //Console.WriteLine($"Range: {i*6}-{i*6 + 5}");
+                        //foreach (var item in doubled)
+                        //{
+                        //    Console.Write(item + " ");
+                        //}
+                        for (int k = i * 6; k < i * 6 + 5; ++k)
+                        {
+                            //Console.WriteLine(Settings.Table[k] + " " + doubled[k]);
+                            if (Settings.Table[k] == doubled[j])
+                            {
+                                Console.WriteLine($"SWAP: {Settings.Table[k]} to {missing[j]} at {k} i={i}");
+                                Settings.Table[k] = missing[j];
+                            }
+                        }
+                    }
+
+                }
+
                 Actions.DelayAction(50, new Action(() => { draw(i *  Settings.Count); }));
             }
         }
@@ -159,6 +185,33 @@ namespace Sudoku
             }
 
             return missingValues;
+        }
+        public List<string> doubleValues(int multiple)
+        {
+            int startingIndex = multiple % 2 == 0 ? multiple * (Settings.Count * 2) / 2 : ((multiple - 1) * (Settings.Count * 2) / 2) + Settings.Count / 2;
+
+            List<string> values = new List<string>();
+            List<string> doubleValues = new List<string>();
+
+            for (int i = 0; i < Settings.Count / 2; ++i)
+            {
+                if (!values.Contains(Settings.Table[startingIndex]))
+                {
+                    values.Add(Settings.Table[startingIndex]);
+                }
+                startingIndex++;
+            }
+            startingIndex += Settings.Count / 2;
+            for (int i = 0; i < Settings.Count / 2; ++i)
+            {
+                if (values.Contains(Settings.Table[startingIndex]))
+                {
+                    doubleValues.Add(Settings.Table[startingIndex]);
+                }
+                startingIndex++;
+            }
+
+            return doubleValues;
         }
     }
 }
