@@ -14,13 +14,10 @@ namespace Sudoku
             settings.Table = new string[table];
             settings.Count = count;
             settings.Characters = new string[count];
-            int result = 0;
             for (int i = 0; i < count; ++i)
             {
                 settings.Characters[i] = $"{i + 1}";
-                result += i+1;
             }
-            settings.Result = result;
             Settings = settings;      
         }
         public void fillTable()
