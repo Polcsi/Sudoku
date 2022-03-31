@@ -159,34 +159,27 @@ namespace Sudoku
         }
         private bool checkSquare(int multiple)
         {
-            int startingIndex = multiple % 2 == 0 ? multiple * (Settings.Count * 2) / 2 : ((multiple - 1) * (Settings.Count * 2) / 2) + Settings.Count / 2;
-
-            List<string> values = new List<string>();
-
-            for (int i = 0; i < Settings.Count / 2; ++i)
+            int startingIndex = 0;
+            switch (multiple % (Settings.Count / 3))
             {
-                if (!values.Contains(Settings.Table[startingIndex]))
-                {
-                    values.Add(Settings.Table[startingIndex]);
-                }
-                startingIndex++;
+                case 0:
+                    startingIndex = multiple * (Settings.Count * (Settings.Count / 3)) / (Settings.Count / 3);
+                    break;
+                case 1:
+                    startingIndex = ((multiple - 1) * (Settings.Count * (Settings.Count / 3)) / (Settings.Count / 3)) + 3;
+                    break;
+                case 2:
+                    if (multiple > (Settings.Count / 3))
+                    {
+                        startingIndex = ((Settings.Count / 3) * 2) + Settings.Count * (multiple - 2);
+                    } else
+                    {
+                        startingIndex = (Settings.Count / 3) * multiple;
+                    }
+                    break;
+                default:
+                    break;
             }
-            startingIndex += Settings.Count / 2;
-            for (int i = 0; i < Settings.Count / 2; ++i)
-            {
-                if (!values.Contains(Settings.Table[startingIndex]))
-                {
-                    values.Add(Settings.Table[startingIndex]);
-                }
-                startingIndex++;
-            }
-
-            return values.Count() ==  Settings.Count;
-        }
-        public bool checkEverySqureType(int multiple)
-        {
-            int startingIndex = multiple % 2 == 0 ? multiple * (Settings.Count * 2) / 2 : ((multiple - 1) * (Settings.Count * 2) / 2) + 3;
-            // int startingIndex = ((multiple + 1) / 3) == 0 ? multiple * (Settings.Count * 2) / 2 : ((multiple - 1) * (Settings.Count * 2) / 2) + 3;
             List<string> values = new List<string>();
 
             for (int i = 0; i < Settings.Count / 3; i++)
@@ -197,9 +190,10 @@ namespace Sudoku
                     {
                         values.Add(Settings.Table[startingIndex]);
                     }
-                    Console.WriteLine(Settings.Table[startingIndex]);
+                    //Console.Write(Settings.Table[startingIndex] + " ");
                     startingIndex++;
                 }
+                //Console.WriteLine();
                 startingIndex += Settings.Count - 3;
             }
 
