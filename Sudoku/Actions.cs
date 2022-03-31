@@ -6,12 +6,12 @@ namespace Sudoku
 {
     class Actions
     {
-        public static void DelayAction(int millisecond, Action action)
+        protected static void DelayAction(int millisecond, Action action)
         {
             Thread.Sleep(millisecond);
             action.Invoke();
         }
-        public static void WriteSudoku(Settings settings)
+        protected static void WriteSudoku(Settings settings)
         {
             using(StreamWriter fs = new StreamWriter("sudoku.txt", false))
             {

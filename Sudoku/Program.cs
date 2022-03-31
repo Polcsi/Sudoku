@@ -6,15 +6,15 @@ namespace Sudoku
     {
         static void Main(string[] args)
         {
-            Sudoku sudoku = new Sudoku(81, 9);
-            //Sudoku sudoku = new Sudoku(36, 6);
-            //while (!sudoku.isValid())
-            //{
-            //    Console.Clear();
-            //    sudoku.fillTable();
-            //}
-
-            sudoku.fillTable();
+            Sudoku sudoku = new Sudoku(36, 6);
+            while (!sudoku.isValid())
+            {
+                Console.Clear();
+                sudoku.fillTable();
+            }
+            //Sudoku sudoku = new Sudoku(81, 9);
+            //sudoku.fillTable();
+            //Console.WriteLine(sudoku.isValid());
 
             _ = Console.ReadKey();
         }
