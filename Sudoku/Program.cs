@@ -12,9 +12,6 @@ namespace Sudoku
                 Console.Clear();
                 sudoku.fillTable();
             }
-            //Sudoku sudoku = new Sudoku(81, 9);
-            //sudoku.fillTable();
-            //Console.WriteLine(sudoku.isValid());
 
             _ = Console.ReadKey();
         }
