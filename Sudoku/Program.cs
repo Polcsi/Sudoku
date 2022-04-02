@@ -13,6 +13,8 @@ namespace Sudoku
                 sudoku.fillTable();
             }
 
+            //Sudoku sudoku = new Sudoku(81, 9);
+            //sudoku.fillTable();
             _ = Console.ReadKey();
         }
     }

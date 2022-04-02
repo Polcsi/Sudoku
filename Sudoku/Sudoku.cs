@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Sudoku
 {
-    class Sudoku : Actions
+    class Sudoku
     {
         private static readonly Random rnd = new Random();
         private Settings Settings { get; set; }
@@ -18,7 +18,7 @@ namespace Sudoku
             {
                 settings.Characters[i] = $"{i + 1}";
             }
-            Settings = settings;      
+            Settings = settings;
         }
         public void fillTable()
         {
@@ -39,21 +39,21 @@ namespace Sudoku
                         string[] aboveColumnChars;
                         for (int j = 0; j < Settings.Count; ++j)
                         {
-                            aboveColumnChars = new string[(i * Settings.Count) /  Settings.Count];
+                            aboveColumnChars = new string[(i * Settings.Count) / Settings.Count];
                             for (int k = 1; k < aboveColumnChars.Length + 1; ++k)
                             {
-                                aboveColumnChars[k - 1] = Settings.Table[(j + (i *  Settings.Count) - (k *  Settings.Count))];
+                                aboveColumnChars[k - 1] = Settings.Table[(j + (i * Settings.Count) - (k * Settings.Count))];
                             }
-                            
+
                             string randomChar = Settings.Characters[rnd.Next(Settings.Characters.Length)];
                             int avoidInfiniteLoop = 0;
                             while (aboveColumnChars.Contains(randomChar) && avoidInfiniteLoop < 14)
-                            { 
+                            {
                                 randomChar = Settings.Characters[rnd.Next(Settings.Characters.Length)];
                                 avoidInfiniteLoop++;
                             }
-                            
-                            Settings.Table[j + (i *  Settings.Count)] = randomChar;
+
+                            Settings.Table[j + (i * Settings.Count)] = randomChar;
                         }
                     }
                 }
@@ -110,16 +110,16 @@ namespace Sudoku
                         }
                     }
                 }
-                DelayAction(70, new Action(() => { draw(i *  Settings.Count); }));
+                Actions.DelayAction(70, new Action(() => { draw(i * Settings.Count); }));
             }
-            WriteSudoku(Settings);
+            Actions.WriteSudoku(Settings);
         }
         private void draw(int row)
         {
-            for (int i = 0; i <  Settings.Count; ++i)
+            for (int i = 0; i < Settings.Count; ++i)
             {
-                DelayAction(0, new Action(() => { Console.Write("|" + Settings.Table[i + row]); }));
-                if ((i + 1) %  Settings.Count == 0)
+                Actions.DelayAction(0, new Action(() => { Console.Write("|" + Settings.Table[i + row]); }));
+                if ((i + 1) % Settings.Count == 0)
                 {
                     Console.WriteLine("|");
                 }
@@ -128,64 +128,31 @@ namespace Sudoku
         private bool checkRow(int multiple)
         {
             List<string> values = new List<string>();
-            for (int i = 0; i <  Settings.Count; ++i)
+            for (int i = 0; i < Settings.Count; ++i)
             {
                 if (!values.Contains(Settings.Table[i + multiple]))
                 {
                     values.Add(Settings.Table[i + multiple]);
                 }
             }
-            return values.Count() ==  Settings.Count;
+            return values.Count() == Settings.Count;
         }
         private bool checkColumn(int multiple)
         {
             List<string> values = new List<string>();
-            for (int i = 0; i <  Settings.Count; ++i)
+            for (int i = 0; i < Settings.Count; ++i)
             {
-                if (!values.Contains(Settings.Table[i *  Settings.Count + multiple]))
+                if (!values.Contains(Settings.Table[i * Settings.Count + multiple]))
                 {
-                    values.Add(Settings.Table[i *  Settings.Count + multiple]);
+                    values.Add(Settings.Table[i * Settings.Count + multiple]);
                 }
             }
-            return values.Count() ==  Settings.Count;
+            return values.Count() == Settings.Count;
         }
         private bool checkSquare(int multiple)
         {
-            int startingIndex = 0;
-            switch (multiple % (Settings.Count / 3))
-            {
-                case 0:
-                    startingIndex = multiple * (Settings.Count * (Settings.Count / 3)) / (Settings.Count / 3);
-                    break;
-                case 1:
-                    startingIndex = ((multiple - 1) * (Settings.Count * (Settings.Count / 3)) / (Settings.Count / 3)) + 3;
-                    break;
-                case 2:
-                    if (multiple > (Settings.Count / 3))
-                    {
-                        startingIndex = ((Settings.Count / 3) * 2) + Settings.Count * (multiple - 2);
-                    } else
-                    {
-                        startingIndex = (Settings.Count / 3) * multiple;
-                    }
-                    break;
-                default:
-                    break;
-            }
-            List<string> values = new List<string>();
-
-            for (int i = 0; i < Settings.Count / 3; i++)
-            {
-                for (int j = 0; j < 3; ++j)
-                {
-                    if (!values.Contains(Settings.Table[startingIndex]))
-                    {
-                        values.Add(Settings.Table[startingIndex]);
-                    }
-                    startingIndex++;
-                }
-                startingIndex += Settings.Count - 3;
-            }
+            int startingIndex = getStartingIndex(multiple);
+            List<string> values = getValues(startingIndex);
 
             return values.Count() == Settings.Count;
         }
@@ -197,7 +164,7 @@ namespace Sudoku
                 bool row = checkRow(i * Settings.Count);
                 bool column = checkColumn(i);
                 bool square = checkSquare(i);
-                if(row && column && square)
+                if (row && column && square)
                 {
                     valid.Add(true);
                 }
@@ -206,43 +173,9 @@ namespace Sudoku
         }
         private List<string> missingValues(int multiple)
         {
-            int startingIndex = 0;
-            switch (multiple % (Settings.Count / 3))
-            {
-                case 0:
-                    startingIndex = multiple * (Settings.Count * (Settings.Count / 3)) / (Settings.Count / 3);
-                    break;
-                case 1:
-                    startingIndex = ((multiple - 1) * (Settings.Count * (Settings.Count / 3)) / (Settings.Count / 3)) + 3;
-                    break;
-                case 2:
-                    if (multiple > (Settings.Count / 3))
-                    {
-                        startingIndex = ((Settings.Count / 3) * 2) + Settings.Count * (multiple - 2);
-                    }
-                    else
-                    {
-                        startingIndex = (Settings.Count / 3) * multiple;
-                    }
-                    break;
-                default:
-                    break;
-            }
-            List<string> values = new List<string>();
+            int startingIndex = getStartingIndex(multiple);
+            List<string> values = getValues(startingIndex);
             List<string> missingValues = new List<string>();
-
-            for (int i = 0; i < Settings.Count / 3; i++)
-            {
-                for (int j = 0; j < 3; ++j)
-                {
-                    if (!values.Contains(Settings.Table[startingIndex]))
-                    {
-                        values.Add(Settings.Table[startingIndex]);
-                    }
-                    startingIndex++;
-                }
-                startingIndex += Settings.Count - 3;
-            }
 
             foreach (var chars in Settings.Characters)
             {
@@ -256,6 +189,47 @@ namespace Sudoku
         }
         private List<string> doubleValues(int multiple)
         {
+            int startingIndex = getStartingIndex(multiple);
+            List<string> values = new List<string>();
+            List<string> doubledValues = new List<string>();
+
+            for (int i = 0; i < Settings.Count / 3; i++)
+            {
+                for (int j = 0; j < 3; ++j)
+                {
+                    if (i == 0 && !values.Contains(Settings.Table[startingIndex]))
+                    {
+                        values.Add(Settings.Table[startingIndex]);
+                    } else if (i > 0 && values.Contains(Settings.Table[startingIndex]))
+                    {
+                        doubledValues.Add(Settings.Table[startingIndex]);
+                    }
+                    startingIndex++;
+                }
+                startingIndex += Settings.Count - 3;
+            }
+
+            return doubledValues;
+        }
+        private List<string> getValues(int startingIndex)
+        {
+            List<string> values = new List<string>();
+            for (int i = 0; i < Settings.Count / 3; i++)
+            {
+                for (int j = 0; j < 3; ++j)
+                {
+                    if (!values.Contains(Settings.Table[startingIndex]))
+                    {
+                        values.Add(Settings.Table[startingIndex]);
+                    }
+                    startingIndex++;
+                }
+                startingIndex += Settings.Count - 3;
+            }
+            return values;
+        }
+        private int getStartingIndex(int multiple)
+        {
             int startingIndex = 0;
             switch (multiple % (Settings.Count / 3))
             {
@@ -278,26 +252,7 @@ namespace Sudoku
                 default:
                     break;
             }
-            List<string> values = new List<string>();
-            List<string> doubledValues = new List<string>();
-
-            for (int i = 0; i < Settings.Count / 3; i++)
-            {
-                for (int j = 0; j < 3; ++j)
-                {
-                    if (i == 0 &&!values.Contains(Settings.Table[startingIndex]))
-                    {
-                        values.Add(Settings.Table[startingIndex]);
-                    } else if(i > 0 && values.Contains(Settings.Table[startingIndex]))
-                    {
-                        doubledValues.Add(Settings.Table[startingIndex]);
-                    }
-                    startingIndex++;
-                }
-                startingIndex += Settings.Count - 3;
-            }
-
-            return doubledValues;
+            return startingIndex;
         }
     }
 }
