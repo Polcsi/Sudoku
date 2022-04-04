@@ -81,54 +81,23 @@ namespace Sudoku
                     {
                         doubled += $"{item}";
                     }
-                    Console.WriteLine($"CHECK FIRST COLUMN '{doubled}' "+ doubledFirstSquare.Contains(Settings.Table[k]));
+                    //Console.WriteLine($"CHECK FIRST COLUMN '{doubled}' "+ doubledFirstSquare.Contains(Settings.Table[k]));
                     if (doubledFirstSquare.Contains(Settings.Table[k]))
                     {
                         for (int l = i * Settings.Count + (3 * 1); l < i * Settings.Count + (3 * 1) + 3; ++l)
                         {
-                            Console.WriteLine($"CHECK MIDDLE COLUMN e: {Settings.Table[l]} {doubledSecondSquare.Contains(Settings.Table[l])}");
+                            //Console.WriteLine($"CHECK MIDDLE COLUMN e: {Settings.Table[l]} {doubledSecondSquare.Contains(Settings.Table[l])}");
                             if(doubledSecondSquare.Contains(Settings.Table[l]) && missingFirstSquare.Contains(Settings.Table[l]))
                             {
-                                Console.WriteLine($"SWAP: {Settings.Table[l]} to {Settings.Table[k]} at {l} and {Settings.Table[k]} to {Settings.Table[l]} at {k}");
+                                //Console.WriteLine($"SWAP: {Settings.Table[l]} to {Settings.Table[k]} at {l} and {Settings.Table[k]} to {Settings.Table[l]} at {k}");
                                 string ref1 = Settings.Table[l];
                                 Settings.Table[l] = Settings.Table[k];
                                 Settings.Table[k] = ref1;
                             }
                         }
-
                     } 
-                    //else
-                    //{
-                    //    for (int m = i * Settings.Count + (3 * 2); m < i * Settings.Count + (3 * 2) + 3; ++m)
-                    //    {
-                    //        Console.WriteLine($"CHECK LAST COLUMN e: {Settings.Table[m]} {doubledThirdSquare.Contains(Settings.Table[m])}");
-                    //        if (doubledThirdSquare.Contains(Settings.Table[m]))
-                    //        {
-                    //            Console.WriteLine($"SWAP: {Settings.Table[m]} to {Settings.Table[k]} at {m} and {Settings.Table[k]} to {Settings.Table[m]} at {k}");
-                    //            string ref1 = Settings.Table[m];
-                    //            Settings.Table[m] = Settings.Table[k];
-                    //            Settings.Table[k] = ref1;
-
-                    //        }
-                    //    }
-                    //}
-                    //if (doubledThirdSquare.Contains(Settings.Table[k]))
-                    //{
-                    //    for (int m = i * Settings.Count + (3 * 2); m < i * Settings.Count + (3 * 2) + 3; ++m)
-                    //    {
-                    //        Console.WriteLine($"CHECK LAST COLUMN e: {Settings.Table[m]} {doubledThirdSquare.Contains(Settings.Table[m])}");
-                    //        if (doubledThirdSquare.Contains(Settings.Table[m]))
-                    //        {
-                    //            Console.WriteLine($"SWAP: {Settings.Table[m]} to {Settings.Table[k]} at {m} and {Settings.Table[k]} to {Settings.Table[m]} at {k}");
-                    //            string ref1 = Settings.Table[m];
-                    //            Settings.Table[m] = Settings.Table[k];
-                    //            Settings.Table[k] = ref1;
-
-                    //        }
-                    //    }
-                    //}
                 }
-                    Actions.DelayAction(70, new Action(() => { draw(i * Settings.Count); }));
+                Actions.DelayAction(70, new Action(() => { draw(i * Settings.Count); }));
             }
             Actions.WriteSudoku(Settings);
         }
