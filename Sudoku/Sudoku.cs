@@ -58,59 +58,147 @@ namespace Sudoku
                     }
                 }
 
-                List<string> doubled = doubleValues(i);
-                List<string> missing = missingValues(i);
-
-                if (doubled.Count > 0)
+                int add = i;
+                if (i % (Settings.Count / 3) == 1)
                 {
-                    for (int j = 0; j < doubled.Count; ++j)
+                    add -= 1;
+                }
+                else if (i % (Settings.Count / 3) == 2)
+                {
+                    add -= 2;
+                }
+                List<string> doubledFirstSquare = doubleValues(add);
+                List<string> missingFirstSquare = missingValues(add);
+                List<string> doubledSecondSquare = doubleValues(add + 1);
+                List<string> missingSecondSquare = missingValues(add + 1);
+                List<string> doubledThirdSquare = doubleValues(add + 2);
+                List<string> missingThirdSquare = missingValues(add + 2);
+
+                for (int k = i * Settings.Count + (3 * 0); k < i * Settings.Count + (3 * 0) + 3; ++k)
+                {
+                    //Console.WriteLine(doubledFirstSquare.Contains(Settings.Table[k]));
+                    if (doubledFirstSquare.Contains(Settings.Table[k]))
                     {
-                        //Console.Write($"Range: {i * Settings.Count}-{i * Settings.Count + Settings.Count / 2} ");
-                        //foreach (var item in missing)
-                        //{
-                        //    Console.Write(item + " ");
-                        //}
-                        //foreach (var item in doubled)
-                        //{
-                        //    Console.Write(item + " ");
-                        //}
-                        //Console.WriteLine();
-                        for (int k = i * Settings.Count; k < i * Settings.Count + Settings.Count / 2; ++k)
+                        for (int l = i * Settings.Count + (3 * 1); l < i * Settings.Count + (3 * 1) + 3; ++l)
                         {
-                            //Console.WriteLine(Settings.Table[k] + " " + missing[j]);
-                            //Console.WriteLine($"{missing[j]} contains {Settings.Table[k]} | {missing[j].Contains(Settings.Table[k])}");
-                            if (missing[j].Contains(Settings.Table[k]))
+                            Console.WriteLine(doubledSecondSquare.Contains(Settings.Table[l]));
+                            if(doubledSecondSquare.Contains(Settings.Table[l]))
                             {
-                                //Console.WriteLine($"SWAP: {Settings.Table[k]} to {doubled[j]} at {k} i={i}");
-                                Settings.Table[k] = doubled[j];
-                            }
-                        }
-                    }
-                    for (int j = 0; j < doubled.Count; ++j)
-                    {
-                        //Console.Write($"Range: {i * Settings.Count + 3}-{i * Settings.Count + 5} ");
-                        //foreach (var item in doubled)
-                        //{
-                        //    Console.Write(item + " ");
-                        //}
-                        //foreach (var item in missing)
-                        //{
-                        //    Console.Write(item + " ");
-                        //}
-                        //Console.WriteLine();
-                        for (int k = i * Settings.Count + Settings.Count / 2; k < i * Settings.Count + Settings.Count; ++k)
-                        {
-                            //Console.WriteLine(Settings.Table[k] + " " + doubled[j]);
-                            //Console.WriteLine($"{doubled[j]} contains {Settings.Table[k]} | {doubled[j].Contains(Settings.Table[k])}");
-                            if (doubled[j].Contains(Settings.Table[k]))
-                            {
-                                //Console.WriteLine($"SWAP: {Settings.Table[k]} to {missing[j]} at {k} i={i}");
-                                Settings.Table[k] = missing[j];
+                                Console.WriteLine($"SWAP: {Settings.Table[l]} to {Settings.Table[k]} at {l} and {Settings.Table[k]} to {Settings.Table[l]} at {k}");
+                                string ref1 = Settings.Table[l];
+                                Settings.Table[l] = Settings.Table[k];
+                                Settings.Table[k] = ref1;
+                                    
                             }
                         }
                     }
                 }
-                Actions.DelayAction(70, new Action(() => { draw(i * Settings.Count); }));
+
+
+
+                    //for (int l = 0; l < (Settings.Count / 3); l++)
+                    //{
+                    //    int add = i + l;
+                    //    if (i % (Settings.Count / 3) == 1)
+                    //    {
+                    //        add -= 1;
+                    //    } else if(i % (Settings.Count / 3) == 2)
+                    //    {
+                    //        add -= 2;
+                    //    }
+
+                    //    List<string> doubled = doubleValues(add);
+                    //    List<string> missing = missingValues(add);
+
+                    //    Console.Write("DOUBLED: ");
+                    //    foreach (var item in doubled)
+                    //    {
+                    //        Console.Write($"{item} ");
+                    //    }
+                    //    Console.WriteLine();
+
+                    //    if (doubled.Count > 0)
+                    //    {
+                    //        for (int j = 0; j < doubled.Count; ++j)
+                    //        {
+                    //            Console.Write($"Range: { i * Settings.Count + (3 * l)}-{i * Settings.Count + (3 * l) + 3} ");
+                    //            foreach (var item in missing)
+                    //            {
+                    //                Console.Write(item + " ");
+                    //            }
+                    //            foreach (var item in doubled)
+                    //            {
+                    //                Console.Write(item + " ");
+                    //            }
+                    //            Console.WriteLine();
+                    //            for (int k = i * Settings.Count + (3 * l); k < i * Settings.Count + (3 * l) + 3; ++k)
+                    //            {
+                    //                //Console.WriteLine(Settings.Table[k] + " " + missing[j]);
+                    //                //Console.WriteLine($"{missing[j]} contains {Settings.Table[k]} | {missing[j].Contains(Settings.Table[k])}");
+                    //                if (doubled[j].Contains(Settings.Table[k]))
+                    //                {
+                    //                    //Console.WriteLine($"SWAP: {Settings.Table[k]} to {missing[j]} at {k} i={i}");
+                    //                    //Settings.Table[k] = missing[j];
+                    //                }
+                    //            }
+                    //        }
+                    //    }
+                    //}
+
+                    //List<string> doubled = doubleValues(i);
+                    //List<string> missing = missingValues(i);
+
+                    //if (doubled.Count > 0)
+                    //{
+                    //    for (int j = 0; j < doubled.Count; ++j)
+                    //    {
+                    //        //Console.Write($"Range: {i * Settings.Count}-{i * Settings.Count + Settings.Count / 2} ");
+                    //        //foreach (var item in missing)
+                    //        //{
+                    //        //    Console.Write(item + " ");
+                    //        //}
+                    //        //foreach (var item in doubled)
+                    //        //{
+                    //        //    Console.Write(item + " ");
+                    //        //}
+                    //        //Console.WriteLine();
+                    //        for (int k = i * Settings.Count; k < i * Settings.Count + Settings.Count / 2; ++k)
+                    //        {
+                    //            //Console.WriteLine(Settings.Table[k] + " " + missing[j]);
+                    //            //Console.WriteLine($"{missing[j]} contains {Settings.Table[k]} | {missing[j].Contains(Settings.Table[k])}");
+                    //            if (missing[j].Contains(Settings.Table[k]))
+                    //            {
+                    //                //Console.WriteLine($"SWAP: {Settings.Table[k]} to {doubled[j]} at {k} i={i}");
+                    //                Settings.Table[k] = doubled[j];
+                    //            }
+                    //        }
+                    //    }
+                    //    for (int j = 0; j < doubled.Count; ++j)
+                    //    {
+                    //        //Console.Write($"Range: {i * Settings.Count + 3}-{i * Settings.Count + 5} ");
+                    //        //foreach (var item in doubled)
+                    //        //{
+                    //        //    Console.Write(item + " ");
+                    //        //}
+                    //        //foreach (var item in missing)
+                    //        //{
+                    //        //    Console.Write(item + " ");
+                    //        //}
+                    //        //Console.WriteLine();
+                    //        for (int k = i * Settings.Count + Settings.Count / 2; k < i * Settings.Count + Settings.Count; ++k)
+                    //        {
+                    //            //Console.WriteLine(Settings.Table[k] + " " + doubled[j]);
+                    //            //Console.WriteLine($"{doubled[j]} contains {Settings.Table[k]} | {doubled[j].Contains(Settings.Table[k])}");
+                    //            if (doubled[j].Contains(Settings.Table[k]))
+                    //            {
+                    //                //Console.WriteLine($"SWAP: {Settings.Table[k]} to {missing[j]} at {k} i={i}");
+                    //                Settings.Table[k] = missing[j];
+                    //            }
+                    //        }
+                    //    }
+                    //}
+
+                    Actions.DelayAction(70, new Action(() => { draw(i * Settings.Count); }));
             }
             Actions.WriteSudoku(Settings);
         }
