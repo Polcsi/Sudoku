@@ -11,9 +11,9 @@ namespace Sudoku
             Thread.Sleep(millisecond);
             action.Invoke();
         }
-        public static void WriteSudoku(Settings settings)
+        public static void WriteSudoku(Settings settings, string name)
         {
-            using(StreamWriter fs = new StreamWriter("sudoku.txt", false))
+            using(StreamWriter fs = new StreamWriter($"{name}.txt", false))
             {
                 for (int i = 0; i < settings.Table.Length; ++i)
                 {

@@ -27,6 +27,7 @@ namespace Sudoku
             {
                 while (!checkRow(i * Settings.Count))
                 {
+                    START:
                     string[] aboveColumnChars;
                     int add = i;
                     if (i % (Settings.Count / 3) == 1)
@@ -60,6 +61,11 @@ namespace Sudoku
                         {
                             aboveColumnChars[k - 1] = Settings.Table[(j + (i * Settings.Count) - (k * Settings.Count))];
                         }
+                        //foreach (var item in aboveColumnChars)
+                        //{
+                        //    Console.Write(item + " ");
+                        //}
+                        //Console.WriteLine($"at {j + (i * Settings.Count)}");
                     
                         string randomChar = missing[rnd.Next(missing.Count)];
                         int avoidInfiniteLoop = 0;
@@ -67,6 +73,23 @@ namespace Sudoku
                         {
                             randomChar = missing[rnd.Next(missing.Count)];
                             avoidInfiniteLoop++;
+                            //if (!aboveColumnChars.Contains(randomChar) || avoidInfiniteLoop > 30)
+                            //{
+                            //    break;
+                            //}
+                            //else
+                            //{
+                            //    continue;
+                            //}
+                        }
+                        if(aboveColumnChars.Contains(randomChar))
+                        {
+                            for (int k = j; k > 0; --k)
+                            {
+                                Settings.Table[k + (i * Settings.Count)] = null;
+                            }
+                            j = 0;
+                            goto START;
                         }
                     
                         Settings.Table[j + (i * Settings.Count)] = randomChar;
@@ -74,7 +97,7 @@ namespace Sudoku
                 }
                 Actions.DelayAction(70, new Action(() => { draw(i * Settings.Count); }));
             }
-            Actions.WriteSudoku(Settings);
+            Actions.WriteSudoku(Settings, $"sudoku{Settings.Count}x{Settings.Count}");
         }
         private void draw(int row)
         {
