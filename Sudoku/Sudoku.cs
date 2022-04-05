@@ -78,6 +78,12 @@ namespace Sudoku
         }
         private void draw(int row)
         {
+            string border = "+";
+            for (int i = 0; i < Settings.Count / 3; ++i)
+            {
+                border += "-----+";
+            }
+            if (row == 0) { Console.WriteLine(border); }
             for (int i = 0; i < Settings.Count; ++i)
             {
                 Actions.DelayAction(0, new Action(() => { Console.Write("|" + Settings.Table[i + row]); }));
@@ -86,6 +92,11 @@ namespace Sudoku
                     Console.WriteLine("|");
                 }
             }
+            if(row == (Settings.Count * ((Settings.Count / 3) - 1)) || row == (Settings.Count * ((Settings.Count / 3) + ((Settings.Count / 3) - 1))))
+            {
+                Console.WriteLine(border);
+            }
+            if(row == (Settings.Count * Settings.Count) - Settings.Count) { Console.WriteLine(border); }
         }
         private bool checkRow(int multiple)
         {
