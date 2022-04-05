@@ -27,75 +27,50 @@ namespace Sudoku
             {
                 while (!checkRow(i * Settings.Count))
                 {
-                    if (i < 1)
+                    string[] aboveColumnChars;
+                    int add = i;
+                    if (i % (Settings.Count / 3) == 1)
                     {
-                        for (int j = 0; j < Settings.Count; ++j)
-                        {
-                            Settings.Table[j + (i * Settings.Count)] = Settings.Characters[rnd.Next(Settings.Characters.Length)];
-                        }
+                        add -= 1;
                     }
-                    else
+                    else if (i % (Settings.Count / 3) == 2)
                     {
-                        string[] aboveColumnChars;
-                        for (int j = 0; j < Settings.Count; ++j)
-                        {
-                            aboveColumnChars = new string[(i * Settings.Count) / Settings.Count];
-                            for (int k = 1; k < aboveColumnChars.Length + 1; ++k)
-                            {
-                                aboveColumnChars[k - 1] = Settings.Table[(j + (i * Settings.Count) - (k * Settings.Count))];
-                            }
-
-                            string randomChar = Settings.Characters[rnd.Next(Settings.Characters.Length)];
-                            int avoidInfiniteLoop = 0;
-                            while (aboveColumnChars.Contains(randomChar) && avoidInfiniteLoop < 14)
-                            {
-                                randomChar = Settings.Characters[rnd.Next(Settings.Characters.Length)];
-                                avoidInfiniteLoop++;
-                            }
-
-                            Settings.Table[j + (i * Settings.Count)] = randomChar;
-                        }
+                        add -= 2;
                     }
-                }
-
-                int add = i;
-                if (i % (Settings.Count / 3) == 1)
-                {
-                    add -= 1;
-                }
-                else if (i % (Settings.Count / 3) == 2)
-                {
-                    add -= 2;
-                }
-                List<string> doubledFirstSquare = doubleValues(add);
-                List<string> missingFirstSquare = missingValues(add);
-                List<string> doubledSecondSquare = doubleValues(add + 1);
-                List<string> missingSecondSquare = missingValues(add + 1);
-                //List<string> doubledThirdSquare = doubleValues(add + 2);
-                //List<string> missingThirdSquare = missingValues(add + 2);
-
-                for (int k = i * Settings.Count + (3 * 0); k < i * Settings.Count + (3 * 0) + 3; ++k)
-                {
-                    string doubled = "";
-                    foreach (var item in doubledFirstSquare)
+                    for (int j = 0; j < Settings.Count; ++j)
                     {
-                        doubled += $"{item}";
-                    }
-                    //Console.WriteLine($"CHECK FIRST COLUMN '{doubled}' "+ doubledFirstSquare.Contains(Settings.Table[k]));
-                    if (doubledFirstSquare.Contains(Settings.Table[k]))
-                    {
-                        for (int l = i * Settings.Count + (3 * 1); l < i * Settings.Count + (3 * 1) + 3; ++l)
+                    
+                        if(j == 3)
                         {
-                            //Console.WriteLine($"CHECK MIDDLE COLUMN e: {Settings.Table[l]} {doubledSecondSquare.Contains(Settings.Table[l])}");
-                            if(doubledSecondSquare.Contains(Settings.Table[l]) && missingFirstSquare.Contains(Settings.Table[l]))
-                            {
-                                //Console.WriteLine($"SWAP: {Settings.Table[l]} to {Settings.Table[k]} at {l} and {Settings.Table[k]} to {Settings.Table[l]} at {k}");
-                                string ref1 = Settings.Table[l];
-                                Settings.Table[l] = Settings.Table[k];
-                                Settings.Table[k] = ref1;
-                            }
+                            add += 1;
                         }
-                    } 
+                        if (j == 3 + 3)
+                        {
+                            add += 1;
+                        }
+                        List<string> missing = missingValues(add);
+                        string s = "";
+                        foreach (var item in missing)
+                        {
+                            s += $"{item}";
+                        }
+                        //Console.WriteLine($"MISSING {add} {s}");
+                        aboveColumnChars = new string[(i * Settings.Count) / Settings.Count];
+                        for (int k = 1; k < aboveColumnChars.Length + 1; ++k)
+                        {
+                            aboveColumnChars[k - 1] = Settings.Table[(j + (i * Settings.Count) - (k * Settings.Count))];
+                        }
+                    
+                        string randomChar = missing[rnd.Next(missing.Count)];
+                        int avoidInfiniteLoop = 0;
+                        while (aboveColumnChars.Contains(randomChar) && missing.Contains(randomChar) && avoidInfiniteLoop < 30)
+                        {
+                            randomChar = missing[rnd.Next(missing.Count)];
+                            avoidInfiniteLoop++;
+                        }
+                    
+                        Settings.Table[j + (i * Settings.Count)] = randomChar;
+                    }
                 }
                 Actions.DelayAction(70, new Action(() => { draw(i * Settings.Count); }));
             }
