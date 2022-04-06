@@ -6,13 +6,19 @@ namespace Sudoku
     {
         static void Main(string[] args)
         {
-            Sudoku sudoku = new Sudoku(36, 6);
-            sudoku.fillTable();
-            Console.WriteLine(sudoku.isValid());
+            Sudoku smallSudoku = new Sudoku(6);
+            smallSudoku.fillTable();
+            Console.WriteLine(smallSudoku.isValid());
+            smallSudoku.generateGameTable(Level.Easy);
+            smallSudoku.generateGameTable(Level.Medium);
+            smallSudoku.generateGameTable(Level.Hard);
 
-            Sudoku sudoku1 = new Sudoku(81, 9);
-            sudoku1.fillTable();
-            Console.WriteLine(sudoku1.isValid());
+            Sudoku regularSudoku = new Sudoku(9);
+            regularSudoku.fillTable();
+            Console.WriteLine(regularSudoku.isValid());
+            regularSudoku.generateGameTable(Level.Easy);
+            regularSudoku.generateGameTable(Level.Medium);
+            regularSudoku.generateGameTable(Level.Hard);
 
             _ = Console.ReadKey();
         }
