@@ -11,7 +11,7 @@ namespace Sudoku
             Thread.Sleep(millisecond);
             action.Invoke();
         }
-        public static void draw(Settings settings, string[] table)
+        public static void draw<T> (Settings settings, T[] table)
         {
             string border = "+";
             for (int i = 0; i < settings.Count / 3; ++i)
@@ -40,6 +40,35 @@ namespace Sudoku
                     Console.WriteLine(border);
                 }
             }
+        }
+        public static void drawMatrix<T>(Settings settings, T[,] table)
+        {
+            string border = "+";
+            for (int i = 0; i < settings.Count / 3; ++i)
+            {
+                border += "-----+";
+            }
+            int x = 0;
+            Console.WriteLine(border);
+            for (int i = 0; i < settings.Count; ++i)
+            {
+                ++x;
+                Console.Write("|");
+                for (int j = 0; j < settings.Count; ++j)
+                {
+                    DelayAction(15, new Action(() => { Console.Write(table[i, j] + "|"); }));
+                }
+                Console.WriteLine();
+                if (x % settings.SRN == 0)
+                {
+                    Console.WriteLine(border);
+                }
+            }
+        }
+        public static int generateRandom(int num)
+        {
+            Random random = new Random();
+            return random.Next(1, num + 1);
         }
         public static void WriteSudoku(int count, string[] table, string name)
         {
