@@ -13,12 +13,12 @@ namespace Sudoku
             smallSudoku.generateGameTable(Level.Medium);
             smallSudoku.generateGameTable(Level.Hard);
 
-            Sudoku regularSudoku = new Sudoku(9);
-            regularSudoku.fillTable();
-            Console.WriteLine(regularSudoku.isValid());
-            regularSudoku.generateGameTable(Level.Easy);
-            regularSudoku.generateGameTable(Level.Medium);
-            regularSudoku.generateGameTable(Level.Hard);
+            //Sudoku regularSudoku = new Sudoku(9);
+            //regularSudoku.fillTable();
+            //Console.WriteLine(regularSudoku.isValid());
+            //regularSudoku.generateGameTable(Level.Easy);
+            //regularSudoku.generateGameTable(Level.Medium);
+            //regularSudoku.generateGameTable(Level.Hard);
 
             _ = Console.ReadKey();
         }

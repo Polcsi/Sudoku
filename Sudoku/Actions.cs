@@ -11,6 +11,36 @@ namespace Sudoku
             Thread.Sleep(millisecond);
             action.Invoke();
         }
+        public static void draw(Settings settings, string[] table)
+        {
+            string border = "+";
+            for (int i = 0; i < settings.Count / 3; ++i)
+            {
+                border += "-----+";
+            }
+            for (int k = 0; k < settings.Count; k++)
+            {
+                int row = k * settings.Count;
+
+                if (row == 0) { Console.WriteLine(border); }
+                for (int i = 0; i < settings.Count; ++i)
+                {
+                    DelayAction(20, new Action(() => { Console.Write("|" + table[i + row]); }));
+                    if ((i + 1) % settings.Count == 0)
+                    {
+                        Console.WriteLine("|");
+                    }
+                }
+                if (row == (settings.Count * ((settings.Count / 3) - 1)) || row == (settings.Count * ((settings.Count / 3) + ((settings.Count / 3) - 1))))
+                {
+                    Console.WriteLine(border);
+                }
+                if (row == (settings.Count * settings.Count) - settings.Count)
+                {
+                    Console.WriteLine(border);
+                }
+            }
+        }
         public static void WriteSudoku(int count, string[] table, string name)
         {
             using(StreamWriter fs = new StreamWriter($"{name}.txt", false))

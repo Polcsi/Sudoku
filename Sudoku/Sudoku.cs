@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Sudoku
 {
-    public enum Level { Easy = 2, Medium = 10, Hard = 20}
+    public enum Level { Easy = 2, Medium = 9, Hard = 17}
     class Sudoku
     {
         private static readonly Random rnd = new Random();
@@ -97,31 +97,9 @@ namespace Sudoku
                         Settings.Table[j + (i * Settings.Count)] = randomChar;
                     }
                 }
-                Actions.DelayAction(70, new Action(() => { draw(Settings.Table, i * Settings.Count); }));
             }
+            Actions.draw(Settings, Settings.Table); 
             Actions.WriteSudoku(Settings.Count, Settings.Table, $"sudoku{Actions.stringify(Settings.Count)}");
-        }
-        private void draw(string[] table, int row)
-        {
-            string border = "+";
-            for (int i = 0; i < Settings.Count / 3; ++i)
-            {
-                border += "-----+";
-            }
-            if (row == 0) { Console.WriteLine(border); }
-            for (int i = 0; i < Settings.Count; ++i)
-            {
-                Actions.DelayAction(0, new Action(() => { Console.Write("|" + table[i + row]); }));
-                if ((i + 1) % Settings.Count == 0)
-                {
-                    Console.WriteLine("|");
-                }
-            }
-            if(row == (Settings.Count * ((Settings.Count / 3) - 1)) || row == (Settings.Count * ((Settings.Count / 3) + ((Settings.Count / 3) - 1))))
-            {
-                Console.WriteLine(border);
-            }
-            if(row == (Settings.Count * Settings.Count) - Settings.Count) { Console.WriteLine(border); }
         }
         private bool checkRow(int multiple)
         {
@@ -282,10 +260,8 @@ namespace Sudoku
                 Settings.GameTable[rnd.Next(Settings.Count * Settings.Count)] = " ";
             }
             Console.WriteLine($"{Actions.stringify(Settings.Count)} {level} Sudoku");
-            for (int i = 0; i < Settings.Count; ++i)
-            {
-                draw(Settings.GameTable, i * Settings.Count);
-            }
+
+            Actions.draw(Settings, Settings.GameTable);
             Actions.WriteSudoku(Settings.Count, Settings.GameTable, $"{Actions.stringify(Settings.Count)}-{level}");
         }
     }
