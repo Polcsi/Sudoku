@@ -6,9 +6,9 @@ namespace Sudoku
     {
         static void Main(string[] args)
         {
-			NewSudoku nS6 = new NewSudoku(9);
-			nS6.FillTable();
-			nS6.printSudoku();
+            //NewSudoku nS6 = new NewSudoku(9);
+            //nS6.FillTable();
+            //nS6.printSudoku();
 
             NewSudoku nS = new NewSudoku(6);
             nS.FillTable();
