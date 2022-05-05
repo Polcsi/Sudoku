@@ -75,21 +75,34 @@ namespace Sudoku
                 if (col < 3) // Skip the first three line first three column cause its already filled
                     col = 3; // set col to SRN to skip
             }
-            else if (row < Settings.Count - 3) // Skip the center box rows cause its alread filled
+            else if (row >= Settings.SRN && row <= 3) // Skip the center box rows cause its alread filled
             {
-                if (col == (int)(row / Settings.SRN) * Settings.SRN)
+                if (col == 3)
                 {
-                    row += 1;
-                    col = 0;
+                    if(row == 2)
+                    {
+                        row += 1;
+                        col = 0;
+                    }
+                    else if (row == 3)
+                    {
+                        row += 1;
+                        col = 3;
+                        printSudoku();
+                    }
                 }
             }
-            else
+            else if (row == 4)
             {
-                if (col == 0 && row == 4) // Skip the last box cause its alread filled
+                if (col >= 5)
                 {
-                    col = 3; // set col first column
-                    if (row == Settings.Count && col == Settings.Count)
-                        return true; // if row greater than Settings.Count return true and exit the function
+                    row += 1;
+                }
+            } else
+            {
+                if(row >= Settings.Count - 1 && col >= Settings.Count - 1)
+                {
+                    Console.WriteLine("FINISH");
                 }
             }
 
@@ -121,9 +134,10 @@ namespace Sudoku
                 }
             }
         }
-        private bool ContainsBox(int rowStart, int colStart, int num)
+        private bool ContainsBox(int row, int colStart, int num)
         {
             //Console.WriteLine($"{rowStart} - {colStart} - {num}");
+            int rowStart = row - row % 2;
             for (int i = 0; i < Settings.SRN; ++i)
             {
                 for (int j = 0; j < 3; ++j)
@@ -151,7 +165,7 @@ namespace Sudoku
         }
         private bool CheckIfSafe(int row, int col, int num)
         {
-            return (ContainsRow(row, num) && ContainsColumn(col, num) && ContainsBox(row - row % 3, col - col % 3, num));
+            return (ContainsRow(row, num) && ContainsColumn(col, num) && ContainsBox(row, col - col % 3, num));
         }
         private bool fillRemainingBlocks(int row, int col)
         {
