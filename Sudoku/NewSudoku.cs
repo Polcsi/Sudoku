@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Sudoku
 {
@@ -42,7 +38,7 @@ namespace Sudoku
         {
             int col = 0;
             int row = 0;
-            for (int i = 0; i < 9; i += 3)
+            for (int i = 0; i < 6; i += 3)
             {
                 if (row == 0 && i == 0)
                 {
@@ -62,20 +58,20 @@ namespace Sudoku
         }
         private bool fillRemainingBlocksSync(int row, int col)
         {
-            if (col >= Settings.Count && row < Settings.Count - 1) // step to the next row if row length less than Settings.Count - 1 and col >= Settings.Count
+            if (col >= Settings.Count && row < Settings.Count - 1) 
             {
-                row += 1; // increase row by one
-                col = 0; // set column to 0
+                row += 1;
+                col = 0;
             }
             if (row >= Settings.Count && col >= Settings.Count)
                 return true;
 
             if (row < Settings.SRN)
             {
-                if (col < 3) // Skip the first three line first three column cause its already filled
-                    col = 3; // set col to SRN to skip
+                if (col < 3) 
+                    col = 3; 
             }
-            else if (row >= Settings.SRN && row <= 3) // Skip the center box rows cause its alread filled
+            else if (row >= Settings.SRN && row <= 3) 
             {
                 if (col == 3)
                 {
@@ -86,24 +82,15 @@ namespace Sudoku
                     }
                     else if (row == 3)
                     {
+                        
                         row += 1;
-                        col = 3;
-                        printSudoku();
+                        col = 0;
                     }
                 }
             }
-            else if (row == 4)
+            if (row == 5 && col == 6)
             {
-                if (col >= 5)
-                {
-                    row += 1;
-                }
-            } else
-            {
-                if(row >= Settings.Count - 1 && col >= Settings.Count - 1)
-                {
-                    Console.WriteLine("FINISH");
-                }
+                return true;
             }
 
             for (int i = 1; i <= Settings.Count; i++)
@@ -111,13 +98,20 @@ namespace Sudoku
                 if (CheckIfSafe(row, col, i))
                 {
                     Settings.NewTable[row, col] = i;
-                    if (fillRemainingBlocksSync(row, col + 1))
+                    try
+                    {
+                        if (fillRemainingBlocksSync(row, col + 1))
+                            return true;
+                    }
+                    catch (Exception)
+                    {
                         return true;
+                    }
 
-                    Settings.NewTable[row, col] = 0; // Set current index 0 if all number is failed
+                    Settings.NewTable[row, col] = 0; 
                 }
             }
-            return false; // return false if can't solve the sudoku
+            return false; 
         }
         private void fillBox(int row, int col)
         {
@@ -136,15 +130,18 @@ namespace Sudoku
         }
         private bool ContainsBox(int row, int colStart, int num)
         {
-            //Console.WriteLine($"{rowStart} - {colStart} - {num}");
-            int rowStart = row - row % 2;
-            for (int i = 0; i < Settings.SRN; ++i)
+            try
             {
-                for (int j = 0; j < 3; ++j)
+                int rowStart = row - row % 2;
+                for (int i = 0; i < Settings.SRN; ++i)
                 {
-                    if (Settings.NewTable[rowStart + i, colStart + j] == num) return false;
+                    for (int j = 0; j < 3; ++j)
+                    {
+                        if (Settings.NewTable[rowStart + i, colStart + j] == num) return false;
+                    }
                 }
-            }
+            } catch { }
+            
             return true;
         }
         private bool ContainsRow(int rowStart, int num)
@@ -157,10 +154,14 @@ namespace Sudoku
         }
         private bool ContainsColumn(int colStart, int num)
         {
-            for (int i = 0; i < Settings.Count; ++i)
+            try
             {
-                if (Settings.NewTable[i, colStart] == num) return false;
-            }
+                for (int i = 0; i < Settings.Count; ++i)
+                {
+                    if (Settings.NewTable[i, colStart] == num) return false;
+                }
+            } catch { }
+
             return true;
         }
         private bool CheckIfSafe(int row, int col, int num)
