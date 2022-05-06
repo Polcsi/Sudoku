@@ -184,30 +184,6 @@ namespace Sudoku
 
             return missingValues;
         }
-        private List<string> doubleValues(int multiple)
-        {
-            int startingIndex = getStartingIndex(multiple);
-            List<string> values = new List<string>();
-            List<string> doubledValues = new List<string>();
-
-            for (int i = 0; i < Settings.Count / 3; i++)
-            {
-                for (int j = 0; j < 3; ++j)
-                {
-                    if (i == 0 && !values.Contains(Settings.Table[startingIndex]))
-                    {
-                        values.Add(Settings.Table[startingIndex]);
-                    } else if (i > 0 && values.Contains(Settings.Table[startingIndex]))
-                    {
-                        doubledValues.Add(Settings.Table[startingIndex]);
-                    }
-                    startingIndex++;
-                }
-                startingIndex += Settings.Count - 3;
-            }
-
-            return doubledValues;
-        }
         private List<string> getValues(int startingIndex)
         {
             List<string> values = new List<string>();

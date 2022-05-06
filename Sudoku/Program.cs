@@ -7,17 +7,17 @@ namespace Sudoku
         static void Main(string[] args)
         {
             Console.WriteLine("6x6 Sudoku");
-            NewSudoku nS = new NewSudoku(6);
-            nS.FillTable();
-            nS.printSudoku();
+            SudokuMatrix sudokuMatrix = new SudokuMatrix(6);
+            sudokuMatrix.FillTable();
+            sudokuMatrix.printSudoku();
 
             Console.WriteLine("6x6 Sudoku");
-            Sudoku smallSudoku = new Sudoku(6);
-            smallSudoku.fillTable();
+            Sudoku sudoku = new Sudoku(6);
+            sudoku.fillTable();
             //Console.WriteLine(smallSudoku.isValid());
-            smallSudoku.generateGameTable(Level.Easy);
-            smallSudoku.generateGameTable(Level.Medium);
-            smallSudoku.generateGameTable(Level.Hard);
+            sudoku.generateGameTable(Level.Easy);
+            sudoku.generateGameTable(Level.Medium);
+            sudoku.generateGameTable(Level.Hard);
 
             // 9x9 but really slow
             //Sudoku regularSudoku = new Sudoku(9);
